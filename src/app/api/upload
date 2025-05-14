@@ -1,0 +1,47 @@
+import { NextResponse } from "next/server";
+import ffmpegPath from "@ffmpeg-installer/ffmpeg";
+import ffmpeg from "fluent-ffmpeg";
+import { promises as fs } from "fs";
+import path from "path";
+import os from "os";
+import { v4 as uuidv4 } from "uuid";
+
+// Point fluent-ffmpeg at the binary
+ffmpeg.setFfmpegPath(ffmpegPath.path);
+
+export async function POST(req) {
+  const form = await req.formData();
+  const file = form.get("video");
+  if (!file) return NextResponse.json({ error: "No file" }, { status: 400 });
+
+  // read upload into a buffer
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const tmp = path.join(os.tmpdir(), "uploads");
+  await fs.mkdir(tmp, { recursive: true });
+
+  // unique temp filenames
+  const id = uuidv4();
+  const inPath = path.join(tmp, `${id}.in`);
+  const outPath = path.join(tmp, `${id}.mp4`);
+  await fs.writeFile(inPath, buffer);
+
+  // run ffmpeg: upscale to 1080p
+  await new Promise((resolve, reject) => {
+    ffmpeg(inPath)
+      .videoCodec("libx264")
+      .size("1920x1080")
+      .on("end", resolve)
+      .on("error", reject)
+      .save(outPath);
+  });
+
+  // stream it back
+  const data = await fs.readFile(outPath);
+  return new NextResponse(data, {
+    status: 200,
+    headers: {
+      "Content-Type": "video/mp4",
+      "Content-Disposition": `attachment; filename="enhanced.mp4"`,
+    },
+  });
+}
