@@ -1,11 +1,10 @@
 // src/app/layout.js
-import './globals.css'
-import { ClerkProvider } from '@clerk/nextjs'
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata = {
-  title: 'Scaluxe',
-  description: 'Ultra-HD Video Upscaling',
-}
+  title: "Scaluxe",
+  description: "Ultra-HD Video Upscaler",
+};
 
 export default function RootLayout({ children }) {
   return (
@@ -16,5 +15,5 @@ export default function RootLayout({ children }) {
         </ClerkProvider>
       </body>
     </html>
-  )
+  );
 }
