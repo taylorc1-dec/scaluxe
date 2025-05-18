@@ -83,47 +83,69 @@ export default function Home() {
       </section>
 
       {/* Upload (gated) */}
-      <section id="upload" className="mt-16 w-full flex justify-center">
-        <SignedOut>
-          <p className="text-gray-400">
-            Please <a href="/sign-in" className="text-purple-400 hover:underline">sign in</a> and subscribe to enhance your videos.
-          </p>
-        </SignedOut>
+     {/* Upload (gated) */}
+<section
+  id="upload"
+  className="mt-16 w-full flex justify-center"
+>
+  {/* When the user is signed out, show a “please sign in” link */}
+  <SignedOut>
+    <p className="text-gray-400">
+      Please{" "}
+      <a
+        href="/sign-in"
+        className="text-purple-400 hover:underline"
+      >
+        sign in
+      </a>{" "}
+      and subscribe to enhance your videos.
+    </p>
+  </SignedOut>
 
-        <SignedIn>
-          <form
-            onSubmit={handleSubmit}
-            encType="multipart/form-data"
-            className="bg-gray-900 p-6 rounded-2xl shadow-lg max-w-md w-full space-y-4"
-          >
-            <label className="block text-gray-300">Upload Video</label>
-            <input
-              type="file"
-              name="video"
-              accept="video/*"
-              required
-              onChange={(e) => setFileName(e.target.files[0]?.name || '')}
-              className="w-full bg-gray-800 p-2 rounded"
-            />
-            {fileName && (
-              <p className="text-sm text-gray-400">Selected: {fileName}</p>
-            )}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-semibold"
-            >
-              {loading ? 'Enhancing…' : 'Enhance Video'}
-            </button>
-            {loading && (
-              <p className="text-gray-400 text-center">Processing your video…</p>
-            )}
-            {status && (
-              <p className="text-center">{status}</p>
-            )}
-          </form>
-        </SignedIn>
-      </section>
+  {/* When the user is signed in, show the real uploader form */}
+  <SignedIn>
+    <form
+      onSubmit={handleSubmit}
+      encType="multipart/form-data"
+      className="bg-gray-900 p-6 rounded-2xl shadow-lg max-w-md w-full space-y-4"
+    >
+      <label className="block text-gray-300">Upload Video</label>
+      <input
+        type="file"
+        name="video"
+        accept="video/*"
+        required
+        onChange={(e) =>
+          setFileName(e.target.files?.[0]?.name || "")
+        }
+        className="w-full bg-gray-800 p-2 rounded"
+      />
+      {fileName && (
+        <p className="text-sm text-gray-400">
+          Selected: {fileName}
+        </p>
+      )}
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-semibold"
+      >
+        {loading ? "Enhancing…" : "Enhance Video"}
+      </button>
+
+      {loading && (
+        <p className="text-gray-400 text-center">
+          Processing your video…
+        </p>
+      )}
+
+      {status && (
+        <p className="text-center text-gray-400">{status}</p>
+      )}
+    </form>
+  </SignedIn>
+</section>
 
       {/* Footer */}
       <footer className="mt-20 mb-8 text-gray-500 text-sm">
