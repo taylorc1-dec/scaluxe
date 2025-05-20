@@ -90,10 +90,21 @@ export default function Home() {
             </a>
           </SignedOut>
           <SignedIn>
-            <a href="/subscribe" className="block bg-purple-600 hover:bg-purple-700 text-white py-2 rounded font-semibold">
-              Subscribe Now
-            </a>
-          </SignedIn>
+    <button
+      onClick={async () => {
+        const res = await fetch('/api/checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ priceId: 'price_1RQAKaRWlwpNLBjeiLpWXNtz' })
+        });
+        const { url } = await res.json();
+        window.location.assign(url);
+      }}
+      className="block bg-purple-600 hover:bg-purple-700 text-white py-2 rounded font-semibold"
+    >
+      Subscribe Now
+    </button>
+  </SignedIn>
         </div>
       </section>
 

@@ -1,10 +1,7 @@
 // src/app/layout.js
 import { ClerkProvider } from "@clerk/nextjs";
 
-export const metadata = {
-  title: "Scaluxe",
-  description: "Ultra-HD Video Upscaler",
-};
+export const metadata = { /* … */ };
 
 export default function RootLayout({ children }) {
   return (
